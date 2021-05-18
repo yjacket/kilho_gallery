@@ -78,9 +78,7 @@
 
 <body>
     <div>
-        <label for="pagesize">PageSize</label>
-        <input id="pagesize" type="text" pattern="\d*" value="40" maxlength="3">
-        <label for="starting">Starting Point</label>
+        <button onclick="prev()">Prev</button>
         <input id="starting" type="text" prompt="base62 (e.g. imEG)" value="imEG">
         <button onclick="search()">Next</button>
     </div>
@@ -143,7 +141,11 @@
         $("#myGallery").empty();
         append();
       }
-      function append(cnt) {
+      function prev() {
+        $("#myGallery").empty();
+        append(false);
+      }
+      function append(next=true) {
           let x = $("#starting").val();
           if (!x) {
             $("#starting").focus();
@@ -152,17 +154,50 @@
             x = x.substr(x.lastIndexOf("/") + 1);
           }
           let i = s2n(x);
-          let limit = i - (cnt ? cnt : parseInt($("#pagesize").val()));
+          let limit = i - 40 * (next ? 1 : -1);
+          document.cookie = "kilho.gallery.last=" + n2s(i);
           //$("#myGallery").empty();
-          while (i > limit) {
-              let n = n2s(i--);
-              let u = `https://imgdb.in/${n}.png`;
-              let t = `<div class='item'><a href="${u}" onclick="show(this)" data-lightbox='imgdb' data-title='${n}'><img src='${u}'/></a><span class='caption' style="cursor:pointer" onclick="window.open('https://imgdb.in/${n}', '_blank')">${n}</span></div>`;
-              $("#myGallery").append(t);
+          if (next) {
+            while (i > limit) {
+              addItem(n2s(i--), true);
+            }
+          } else {
+            while (i < limit) {
+              addItem(n2s(++i), false);
+            }
           }
           $("#starting").val(n2s(limit));
       }
-      append(100);
+      function addItem(n, append) {
+        let u = `https://imgdb.in/${n}.png`;
+        let t = `<div class='item'><a href="${u}" onclick="show(this)" data-lightbox='imgdb' data-title='${n}'><img id='${n}'src='${u}' onload='onloadimg(event)'/></a><span class='caption' style="cursor:pointer" onclick="window.open('https://imgdb.in/${n}', '_blank')">${n}</span></div>`;
+        if (append)
+            $("#myGallery").append(t);
+            else
+            $("#myGallery").prepend(t);
+      }
+      function onloadimg(evt) {
+          if (evt.target.naturalWidth == 960 && evt.target.naturalHeight == 720) {
+              $("#" + evt.target.id).parent().parent().remove();
+          }
+      }
+      function getCookie(cookie_name) {
+        var x, y;
+        var val = document.cookie.split(';');
+        for (var i = 0; i < val.length; i++) {
+            x = val[i].substr(0, val[i].indexOf('='));
+            y = val[i].substr(val[i].indexOf('=') + 1);
+            x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+            if (x == cookie_name) {
+                return unescape(y); // unescape로 디코딩 후 값 리턴
+            }
+        }
+      }
+      var last = getCookie("kilho.gallery.last");
+      if (last) {
+        $("#starting").val(last);
+      }
+      append();
       </script>
 </body>
 
