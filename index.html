@@ -155,7 +155,10 @@
           }
           let i = s2n(x);
           let limit = i - 40 * (next ? 1 : -1);
-          document.cookie = "kilho.gallery.last=" + n2s(i);
+          var date = new Date();
+          date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+          var expires = "; expires=" + date.toGMTString();
+          document.cookie = "kilho.gallery.last=" + n2s(i) + expires;
           //$("#myGallery").empty();
           if (next) {
             while (i > limit) {
