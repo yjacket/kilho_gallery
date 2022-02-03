@@ -76,10 +76,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.css" integrity="sha512-Woz+DqWYJ51bpVk5Fv0yES/edIMXjj3Ynda+KWTIkGoynAMHrqTcDUQltbipuiaD5ymEo9520lyoVOo9jCQOCA==" crossorigin="anonymous" />
 </head>
 
-<body>
+<body style="font-family: auto; font-size:1rem"> 
     <div>
         <button onclick="prev()">Prev</button>
         <input id="starting" type="text" prompt="base62 (e.g. imEG)" value="imEG">
+        <label for="reverse"><input id="reverse" type="checkbox"> 최신순</label>
         <button onclick="search()">Next</button>
     </div>
     <div id="myGallery" class="myGallery">
@@ -97,7 +98,7 @@
       $(window).scroll(function() {
           if (!loading && ($(window).scrollTop() >  $(document).height() - $(window).height() - 100)) {
               loading= true;
-              append();
+              append($("#reverse").prop("checked") == false);
               loading = false; // reset value of loading once content loaded
           }
       });
