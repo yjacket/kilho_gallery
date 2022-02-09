@@ -91,9 +91,9 @@
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
         </ul>
         <form class="d-flex">
-          <button class="btn btn-outline-light me-2" onclick="prev()">Prev</button>
+          <button type="button" class="btn btn-outline-light me-2" onclick="prev()">Prev</button>
           <input id="starting" class="form-control me-2" type="text" prompt="base62 (e.g. imEG)" value="imEG"> 
-          <button class="btn btn-primary" onclick="search()">Next</button>
+          <button type="button" class="btn btn-primary" onclick="search()">Next</button>
         </form>
       </div>
     </div>
@@ -176,7 +176,7 @@
           if (!x) {
             $("#starting").focus();
           }
-          if (x.indexOf("/")) {
+          if (x.indexOf("/") > 0) {
             x = x.substr(x.lastIndexOf("/") + 1);
           }
           let i = s2n(x);
