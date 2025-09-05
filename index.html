@@ -188,24 +188,25 @@
           //$("#myGallery").empty();
           if (next) {
             while (i > limit) {
-                console.log("old item:", i);
+              console.log("old item:", i);
               addItem(n2s(i--));
             }
           } else {
             while (i < limit) {
-                console.log("new item:", i);
+              console.log("new item:", i);
               addItem(n2s(++i));
             }
           }
           $("#starting").val(n2s(limit));
       }
       function addItem(n) {
-        let u = `https://imgdb.in/${n}.png`;
+        let u = `https://imgdb.in/i/${n}.png`;
         let t = `<div class='item'><a href="${u}" onclick="show(this)" data-lightbox='imgdb' data-title='${n}'><img id='${n}'src='${u}' onload='onloadimg(event)'/></a><span class='caption' style="cursor:pointer" onclick="window.open('https://imgdb.in/${n}', '_blank')">${n}(${s2n(n)})</span></div>`;
         $("#myGallery").append(t);
       }
       function onloadimg(evt) {
-          if (evt.target.naturalWidth == 960 && evt.target.naturalHeight == 720) {
+          if (evt.target.naturalWidth == 960 && evt.target.naturalHeight == 720 || 
+              evt.target.naturalWidth == 300 && evt.target.naturalHeight == 300) {
               $("#" + evt.target.id).parent().parent().remove();
           }
       }
